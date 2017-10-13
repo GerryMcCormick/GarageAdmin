@@ -88,11 +88,9 @@
     <Compile Include="Mechanic.cs">
       <DependentUpon>GarageModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Part.cs">
       <DependentUpon>GarageModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Persistance\GarageDbContext.cs" />
     <Compile Include="Persistance\Repositories\CarRepository.cs" />
     <Compile Include="Persistance\Repositories\InvoiceRepository.cs" />
     <Compile Include="Persistance\Repositories\MechanicRepository.cs" />

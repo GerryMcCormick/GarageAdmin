@@ -8,3 +8,4 @@ C:\Users\gerry\Documents\Magee\Year 4\Enterprise Computing\Assignments\Assignmen
 C:\Users\gerry\Documents\Magee\Year 4\Enterprise Computing\Assignments\Assignment 1\GarageAdmin\GarageAdmin\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\gerry\Documents\Magee\Year 4\Enterprise Computing\Assignments\Assignment 1\GarageAdmin\GarageAdmin\obj\Debug\GarageAdmin.exe
 C:\Users\gerry\Documents\Magee\Year 4\Enterprise Computing\Assignments\Assignment 1\GarageAdmin\GarageAdmin\obj\Debug\GarageAdmin.pdb
+C:\Users\gerry\Documents\Magee\Year 4\Enterprise Computing\Assignments\Assignment 1\GarageAdmin\GarageAdmin\obj\Debug\GarageAdmin.csprojResolveAssemblyReference.cache

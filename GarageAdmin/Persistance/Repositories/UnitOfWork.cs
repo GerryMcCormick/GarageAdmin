@@ -4,7 +4,7 @@ using GarageAdmin.Core.Repositories;
 namespace GarageAdmin.Persistance.Repositories {
     public class UnitOfWork : IUnitOfWork {
 
-        private GarageDbContext _context;
+        private GarageModelContainer _context;
 
         public ICarRepository Cars { get; }
         public IInvoiceRepository Invoices { get; }
@@ -12,7 +12,7 @@ namespace GarageAdmin.Persistance.Repositories {
         public IServicePartRepository ServiceParts { get; }
         public IServiceRepository Services { get; }
 
-        public UnitOfWork(GarageDbContext context) {
+        public UnitOfWork(GarageModelContainer context) {
             _context = context;
 
             Cars = new CarRepository(_context);

@@ -5,9 +5,9 @@ using System.Data.Entity;
 namespace GarageAdmin.Persistance.Repositories {
     class ServicePartRepository : IServicePartRepository {
 
-        private readonly GarageDbContext _context;
+        private readonly GarageModelContainer _context;
 
-        public ServicePartRepository(GarageDbContext context) {
+        public ServicePartRepository(GarageModelContainer context) {
             _context = context;
         }
 

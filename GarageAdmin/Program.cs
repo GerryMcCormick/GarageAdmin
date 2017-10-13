@@ -2,35 +2,41 @@
 using System;
 
 namespace GarageAdmin {
+
+    enum MenuOption {
+        Quit, ListMechanics, ListServicesByReg, ListServicesByMechanic
+    }
+
     class Program {
 
         static void Main(string[] args) {
-
-            int selection;
-            bool numberEntered;
+            MenuOption selection;
+            bool validSelection;
 
             do {
                 MenuHelper.DisplayMenu();
-                numberEntered = int.TryParse(Console.ReadLine(), out selection);
+                validSelection = MenuOption.TryParse(Console.ReadLine(), out selection);
 
-                if (numberEntered) {
+                if (validSelection) {
                     Console.Clear();
 
                     switch (selection) {
-                        case 0:
-                            MenuHelper.Quit();
-                            break;
-                        case 1:
+                        case MenuOption.Quit: 
+                            MenuHelper.Quit(); break;
+                        case MenuOption.ListMechanics:
                             MechanicsHelper.ListMechanics();
                             break;
-                        case 2:
-                            ServiceHelper.ListServiceDetailsForCar();
+                        case MenuOption.ListServicesByReg:
+                            ServiceHelper.ListCarServiceDetailsByReg();
                             break;
-
+                        case MenuOption.ListServicesByMechanic:
+                            ServiceHelper.ListCarServiceDetailsByMechanic();
+                            break;
                     }
-                }
-                
-            } while (selection != 0 || !numberEntered);
+                } else {
+                    MenuHelper.DisplayInvalidMenuOptionSelected();
+                } 
+            } while (selection != MenuOption.Quit || !validSelection);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace GarageAdmin.Helpers {
 
         private static UnitOfWork UnitOfWork {
             get {
-                return new UnitOfWork(GarageDbContext.Create());
+                return new UnitOfWork(new GarageModelContainer());
             }
         }
 

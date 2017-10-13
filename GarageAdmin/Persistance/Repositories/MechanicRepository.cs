@@ -1,6 +1,5 @@
 ﻿using GarageAdmin.Core.Repositories;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 
 namespace GarageAdmin.Persistance.Repositories {
@@ -10,6 +9,12 @@ namespace GarageAdmin.Persistance.Repositories {
 
         public MechanicRepository(GarageModelContainer context) {
             _context = context;
+        }
+
+        public Mechanic GetMechanic(int staffId) {
+            return _context.Mechanics
+                           .Where(m => m.Id == staffId)
+                           .SingleOrDefault();
         }
 
         public IEnumerable<Mechanic> GetMechanics() {
