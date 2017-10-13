@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="GarageModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="GarageModelStoreContainer">
+    <EntitySet Name="Cars" EntityType="GarageModel.Store.Cars" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="CarOwners" EntityType="GarageModel.Store.CarOwners" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Services" EntityType="GarageModel.Store.Services" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Invoices" EntityType="GarageModel.Store.Invoices" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ServiceParts" EntityType="GarageModel.Store.ServiceParts" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Mechanics" EntityType="GarageModel.Store.Mechanics" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Parts" EntityType="GarageModel.Store.Parts" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="CarCarOwner" Association="GarageModel.Store.CarCarOwner">
+      <End Role="Car" EntitySet="Cars" />
+      <End Role="CarOwner" EntitySet="CarOwners" />
+    </AssociationSet>
+    <AssociationSet Name="CarService" Association="GarageModel.Store.CarService">
+      <End Role="Car" EntitySet="Cars" />
+      <End Role="Service" EntitySet="Services" />
+    </AssociationSet>
+    <AssociationSet Name="ServiceMechanic" Association="GarageModel.Store.ServiceMechanic">
+      <End Role="Service" EntitySet="Services" />
+      <End Role="Mechanic" EntitySet="Mechanics" />
+    </AssociationSet>
+    <AssociationSet Name="ServiceServicePart" Association="GarageModel.Store.ServiceServicePart">
+      <End Role="Service" EntitySet="Services" />
+      <End Role="ServicePart" EntitySet="ServiceParts" />
+    </AssociationSet>
+    <AssociationSet Name="ServiceInvoice" Association="GarageModel.Store.ServiceInvoice">
+      <End Role="Service" EntitySet="Services" />
+      <End Role="Invoice" EntitySet="Invoices" />
+    </AssociationSet>
+    <AssociationSet Name="PartServicePart" Association="GarageModel.Store.PartServicePart">
+      <End Role="Part" EntitySet="Parts" />
+      <End Role="ServicePart" EntitySet="ServiceParts" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Cars">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RegNumber" Type="nvarchar" Nullable="false" MaxLength="10" />
+    <Property Name="Make" Type="nvarchar" Nullable="false" MaxLength="15" />
+    <Property Name="Model" Type="nvarchar" Nullable="false" MaxLength="15" />
+    <Property Name="CarOwnerId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CarOwners">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TelNumber" Type="nvarchar" Nullable="false" MaxLength="17" />
+    <Property Name="Address" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="PostCode" Type="nvarchar" Nullable="false" MaxLength="8" />
+  </EntityType>
+  <EntityType Name="Services">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DateServiced" Type="datetime" Nullable="false" />
+    <Property Name="DurationInHours" Type="float" Nullable="false" />
+    <Property Name="CarId" Type="int" Nullable="false" />
+    <Property Name="MechanicId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Invoices">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DateIssued" Type="datetime" Nullable="false" />
+    <Property Name="Paid" Type="bit" Nullable="false" />
+    <Property Name="OverDue" Type="bit" Nullable="false" />
+    <Property Name="ReceivedPaymentOn" Type="datetime" Nullable="false" />
+    <Property Name="ServiceId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ServiceParts">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+    <Property Name="ServiceId" Type="int" Nullable="false" />
+    <Property Name="PartId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Mechanics">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Forename" Type="nvarchar" Nullable="false" MaxLength="15" />
+    <Property Name="Surname" Type="nvarchar" Nullable="false" MaxLength="15" />
+  </EntityType>
+  <EntityType Name="Parts">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SupplierPartNumber" Type="nvarchar" Nullable="false" MaxLength="18" />
+    <Property Name="PartName" Type="nvarchar" Nullable="false" MaxLength="20" />
+    <Property Name="Brand" Type="nvarchar" Nullable="false" MaxLength="15" />
+    <Property Name="Price" Type="float" Nullable="false" />
+    <Property Name="NoInStock" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="CarCarOwner">
+    <End Role="Car" Type="GarageModel.Store.Cars" Multiplicity="*" />
+    <End Role="CarOwner" Type="GarageModel.Store.CarOwners" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="CarOwner">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Car">
+        <PropertyRef Name="CarOwnerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CarService">
+    <End Role="Car" Type="GarageModel.Store.Cars" Multiplicity="1" />
+    <End Role="Service" Type="GarageModel.Store.Services" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Car">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Service">
+        <PropertyRef Name="CarId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ServiceMechanic">
+    <End Role="Service" Type="GarageModel.Store.Services" Multiplicity="*" />
+    <End Role="Mechanic" Type="GarageModel.Store.Mechanics" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Mechanic">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Service">
+        <PropertyRef Name="MechanicId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ServiceServicePart">
+    <End Role="Service" Type="GarageModel.Store.Services" Multiplicity="1" />
+    <End Role="ServicePart" Type="GarageModel.Store.ServiceParts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Service">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ServicePart">
+        <PropertyRef Name="ServiceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ServiceInvoice">
+    <End Role="Service" Type="GarageModel.Store.Services" Multiplicity="1" />
+    <End Role="Invoice" Type="GarageModel.Store.Invoices" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Service">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Invoice">
+        <PropertyRef Name="ServiceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PartServicePart">
+    <End Role="Part" Type="GarageModel.Store.Parts" Multiplicity="1" />
+    <End Role="ServicePart" Type="GarageModel.Store.ServiceParts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Part">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ServicePart">
+        <PropertyRef Name="PartId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

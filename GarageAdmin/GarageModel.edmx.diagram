@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="08f76b9419d84dea8813ec0231455b53" Name="Diagram1" >
+        <EntityTypeShape EntityType="GarageModel.Car" Width="1.5" PointX="2.75" PointY="1.25" />
+        <EntityTypeShape EntityType="GarageModel.CarOwner" Width="1.5" PointX="0.875" PointY="1.375" />
+        <EntityTypeShape EntityType="GarageModel.Service" Width="1.5" PointX="4.75" PointY="1.25" />
+        <EntityTypeShape EntityType="GarageModel.Invoice" Width="1.75" PointX="6.75" PointY="3.375" />
+        <EntityTypeShape EntityType="GarageModel.ServicePart" Width="1.5" PointX="4.75" PointY="4.5" />
+        <EntityTypeShape EntityType="GarageModel.Mechanic" Width="1.5" PointX="6.75" PointY="1.375" />
+        <EntityTypeShape EntityType="GarageModel.Part" Width="1.625" PointX="2.625" PointY="3.875" />
+        <AssociationConnector Association="GarageModel.CarCarOwner" />
+        <AssociationConnector Association="GarageModel.CarService" />
+        <AssociationConnector Association="GarageModel.ServiceMechanic" />
+        <AssociationConnector Association="GarageModel.ServiceServicePart" />
+        <AssociationConnector Association="GarageModel.ServiceInvoice" />
+        <AssociationConnector Association="GarageModel.PartServicePart" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
