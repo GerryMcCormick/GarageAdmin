@@ -1,4 +1,5 @@
-﻿using GarageAdmin.Persistance.Repositories;
+﻿using GarageAdmin.Exceptions;
+using GarageAdmin.Persistance.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,29 +17,30 @@ namespace GarageAdmin.Helpers {
             String regNo;
             List<Service> serviceDetails = new List<Service>();
             char keyEntered;
-            bool validRegNo;
+            bool validRegEntered;
 
             do {
-                validRegNo = false;
                 keyEntered = ' ';
-
                 MenuHelper.DisplayEnterReg();
                 regNo = Console.ReadLine().ToUpper().Trim();
-                validRegNo = ValidationHelper.IsValidRegNo(regNo);
-
-                if (!validRegNo) {
-                    MenuHelper.DisplayInvalidRegEntered();
-                    char.TryParse(Console.ReadLine(), out keyEntered);
-                } else {
-
-                    if (ValidationHelper.CarExists(regNo)) {
-                        serviceDetails = UnitOfWork.Services.GetCarServiceDetailsByReg(regNo).ToList();
-                    } else {
-                        MenuHelper.DisplayCarDoesNotExist();
-                        char.TryParse(Console.ReadLine(), out keyEntered);
-                    }
+                try {
+                    ValidationHelper.ValidateRegNo(regNo);
+                    ValidationHelper.ValidateCarExists(regNo);
+                    validRegEntered = true;
+                    serviceDetails = UnitOfWork.Services.GetCarServiceDetailsByReg(regNo).ToList();
+                } catch (InvalidRegException regEx) {
+                    Console.WriteLine($"\n\t{regEx.Message}");
+                    validRegEntered = false;
+                } catch (CarNotFoundException carEx) {
+                    Console.WriteLine($"\n\t{carEx.Message}");
+                    validRegEntered = false;
                 }
-            } while (ValidationHelper.InvalidRegDataEntered(regNo) && keyEntered != '0');
+
+                if (!validRegEntered) {
+                    MenuHelper.DisplayReturnOrTryAgain();
+                    char.TryParse(Console.ReadLine(), out keyEntered);
+                }
+            } while (!validRegEntered && keyEntered != '0');
 
             if (serviceDetails.Count > 0) {
                 DisplayMechanicsWhoServicedCar(regNo, serviceDetails);
@@ -53,26 +55,27 @@ namespace GarageAdmin.Helpers {
 
             do {
                 keyEntered = ' ';
-
+                staffId = -1;
                 MenuHelper.DisplayEnterMechanicId();
-                bool staffIdIsNumber = int.TryParse(Console.ReadLine().Trim(), out staffId);
 
-                if (staffIdIsNumber && ValidationHelper.ValidStaffIdNumberEntered(staffId)) {
+                try {
+                    staffId = ValidationHelper.ValidateStaffId(Console.ReadLine().Trim());
+                    serviceDetails = UnitOfWork.Services.GetCarsServicedByMechanic(staffId).ToList();
+                } catch (InvalidCastException icEx) {
+                    Console.WriteLine($"\n\t{icEx.Message}");
+                } catch (ArgumentException oorEx) {
+                    Console.WriteLine($"\n\t{oorEx.Message}");
+                } catch (MechanicNotFoundException mnfEx) {
+                    Console.WriteLine($"\n\t{mnfEx.Message}");
+                }
 
-                    if (ValidationHelper.MechanicExists(staffId)) {
-                        serviceDetails = UnitOfWork.Services.GetCarsServicedByMechanic(staffId).ToList();
-                    } else {
-                        MenuHelper.DisplayMechanicDoesNotExist();
-                        char.TryParse(Console.ReadLine(), out keyEntered);
-                    }
-                } else {
-                    // Mechanic's Staff ID couldn't be parsed to an int
-                    MenuHelper.DisplayInvalidMechanicIdEntered();
+                if (staffId == -1) {
+                    MenuHelper.DisplayReturnOrTryAgain();
                     char.TryParse(Console.ReadLine(), out keyEntered);
                 }
-            } while (!ValidationHelper.MechanicExists(staffId) && keyEntered != '0');
+            } while (staffId == -1 && keyEntered != '0');
 
-            if (keyEntered != '0') {
+            if (staffId != -1) {
                 DisplayServicesForMechanic(serviceDetails, staffId);
             }
         }

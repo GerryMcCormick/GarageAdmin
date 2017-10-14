@@ -1,4 +1,6 @@
-﻿using GarageAdmin.Persistance.Repositories;
+﻿using GarageAdmin.Exceptions;
+using GarageAdmin.Persistance.Repositories;
+using System;
 using System.Text.RegularExpressions;
 
 namespace GarageAdmin.Helpers {
@@ -10,18 +12,19 @@ namespace GarageAdmin.Helpers {
             }
         }
 
-        public static bool InvalidRegDataEntered(string regNo) {
-            return !IsValidRegNo(regNo) || !CarExists(regNo);
-        }
-
-        public static bool CarExists(string regNo) {
+        public static void ValidateCarExists(string regNo) {
             var car = UnitOfWork.Cars.GetCar(regNo);
-            return car != null;
+
+            if (car == null) {
+                throw new CarNotFoundException("No car exists that matches the Reg Number entered");
+            }
         }
 
-        public static bool IsValidRegNo(string regNo) {
+        public static void ValidateRegNo(string regNo) {
             Regex alphanumeric = new Regex("^[a-zA-Z0-9]*$");
-            return regNo.Length <= 10 && regNo.Length >= 5 && alphanumeric.IsMatch(regNo);
+            if (regNo.Length > 10 || regNo.Length < 5 || !alphanumeric.IsMatch(regNo)) {
+                throw new InvalidRegException("Reg Number entered must be 5 - 10 alphanumeric characters");
+            }
         }
 
         public static bool MechanicExists(int staffId) {
@@ -29,8 +32,18 @@ namespace GarageAdmin.Helpers {
             return mechanic != null;
         }
 
-        public static bool ValidStaffIdNumberEntered(int staffId) {
-            return staffId > 0 & staffId < 10000;
+        public static int ValidateStaffId(string staffIdString) {
+            if (!int.TryParse(staffIdString, out int staffId)) {
+                throw new InvalidCastException("Mechanic's Staff ID must be 1 - 4 digits");
+            }
+            if (staffId < 0 || staffId > 9999) {
+                throw new ArgumentException("Mechanic's Staff ID must be 1 - 4 digits");
+            }
+            if (!MechanicExists(staffId)) {
+                throw new MechanicNotFoundException("No Mechanic exists that matches the Staff ID entered");
+            }
+
+            return staffId;
         }
     }
 }

@@ -19,16 +19,6 @@ namespace GarageAdmin.Helpers {
             Console.WriteLine("\n\n\n\n\n\n\t\t\t\t\t\tGoodbye!");
         }
 
-        public static void DisplayInvalidRegEntered() {
-            Console.WriteLine("\n\tReg Number entered must be 5 - 10 alphanumeric characters");
-            DisplayReturnOrTryAgain();
-        }
-
-        public static void DisplayInvalidMechanicIdEntered() {
-            Console.WriteLine("\n\tMechanic's Staff ID must be 1 - 4 digits");
-            DisplayReturnOrTryAgain();
-        }
-
         public static void DisplayEnterReg() {
             Console.Clear();
             Console.WriteLine("\n\n\t\t\t\t\tMechanics\n");
@@ -38,17 +28,7 @@ namespace GarageAdmin.Helpers {
         public static void DisplayEnterMechanicId() {
             Console.Clear();
             Console.WriteLine("\n\n\t\t\t\t\tCars Serviced By Mechanic\n");
-            Console.Write("\n\t\tEnter the Staff ID of the Mechanic: ");
-        }
-
-        public static void DisplayCarDoesNotExist() {
-            Console.WriteLine("\n\tNo car exists that matches the Reg Number entered");
-            DisplayReturnOrTryAgain();
-        }
-
-        public static void DisplayMechanicDoesNotExist() {
-            Console.WriteLine("\n\tNo Mechanic exists that matches the Staff ID entered");
-            DisplayReturnOrTryAgain();
+            Console.Write("\n\tEnter the Staff ID of the Mechanic: ");
         }
 
         public static void DisplayReturnOrTryAgain() {
