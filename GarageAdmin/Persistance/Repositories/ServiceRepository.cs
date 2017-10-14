@@ -13,32 +13,25 @@ namespace GarageAdmin.Persistance.Repositories {
             _context = context;
         }
 
-        public Service GetCarServiceDetails(int serviceId) {
-            throw new NotImplementedException();
+        public Service GetServiceDetails(int serviceId) {
+            return _context.Services
+                           .Where(s => s.Id == serviceId)
+                           .FirstOrDefault();
         }
 
-        /// <summary>
-        /// Q2 requires a list of mechanics who serviced car ordered by service date,
-        /// we can get that info from this method.
-        /// </summary>
         public IEnumerable<Service> GetCarServiceDetailsByReg(string regNo) {
             return _context.Services
                            .Include(s => s.Mechanic)
                            .Include(s => s.Car)
                            .Where(c => c.Car.RegNumber == regNo)
-                           .OrderBy(s => s.DateServiced); // order by date serviced
+                           .OrderBy(s => s.DateServiced); 
         }
 
-        /// <summary>
-        /// Q3
-        /// </summary>
         public IEnumerable<Service> GetCarsServicedByMechanic(int staffId) {
-            IEnumerable<Service> services = _context.Services
-                .Include(s => s.Mechanic).Where(m => m.MechanicId == staffId)
-                .Include(s => s.Car)
-                .OrderBy(s => s.DateServiced);
-
-            return services;
+            return _context.Services
+                           .Include(s => s.Mechanic).Where(m => m.MechanicId == staffId)
+                           .Include(s => s.Car)
+                           .OrderBy(s => s.DateServiced);
         }
     }
 }

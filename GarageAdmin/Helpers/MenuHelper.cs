@@ -11,6 +11,7 @@ namespace GarageAdmin.Helpers {
             Console.WriteLine("\n\t\t\t\t1) List all Mechanics");
             Console.WriteLine("\n\t\t\t\t2) List all Mechanics That Serviced a Car");
             Console.WriteLine("\n\t\t\t\t3) List all Cars Serviced by a Mechanic");
+            Console.WriteLine("\n\t\t\t\t4) List details of a Service");
             Console.Write("\n\n\t\t\t\t\tSelection: ");
         }
 
@@ -29,6 +30,12 @@ namespace GarageAdmin.Helpers {
             Console.Clear();
             Console.WriteLine("\n\n\t\t\t\t\tCars Serviced By Mechanic\n");
             Console.Write("\n\tEnter the Staff ID of the Mechanic: ");
+        }
+
+        public static void DisplayEnterServiceId() {
+            Console.Clear();
+            Console.WriteLine("\n\n\t\t\t\t\t Service Details\n");
+            Console.Write("\n\tEnter the Service ID: ");
         }
 
         public static void DisplayReturnOrTryAgain() {

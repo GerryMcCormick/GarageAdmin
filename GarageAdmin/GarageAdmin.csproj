@@ -66,6 +66,7 @@
     <Compile Include="Exceptions\CarNotFoundException.cs" />
     <Compile Include="Exceptions\InvalidRegException.cs" />
     <Compile Include="Exceptions\MechanicNotFoundException.cs" />
+    <Compile Include="Exceptions\ServiceNotFoundException.cs" />
     <Compile Include="GarageModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

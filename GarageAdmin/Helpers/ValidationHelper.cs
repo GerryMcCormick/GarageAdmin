@@ -25,6 +25,7 @@ namespace GarageAdmin.Helpers {
             if (regNo.Length > 10 || regNo.Length < 5 || !alphanumeric.IsMatch(regNo)) {
                 throw new InvalidRegException("Reg Number entered must be 5 - 10 alphanumeric characters");
             }
+            ValidateCarExists(regNo);
         }
 
         public static bool MechanicExists(int staffId) {
@@ -32,18 +33,44 @@ namespace GarageAdmin.Helpers {
             return mechanic != null;
         }
 
+        public static bool ServiceExists(int serviceId) {
+            var service = UnitOfWork.Services.GetServiceDetails(serviceId);
+            return service != null;
+        }
+
         public static int ValidateStaffId(string staffIdString) {
-            if (!int.TryParse(staffIdString, out int staffId)) {
-                throw new InvalidCastException("Mechanic's Staff ID must be 1 - 4 digits");
-            }
-            if (staffId < 0 || staffId > 9999) {
-                throw new ArgumentException("Mechanic's Staff ID must be 1 - 4 digits");
-            }
+            int staffId = ValidateId(staffIdString, "Mechanic");
             if (!MechanicExists(staffId)) {
                 throw new MechanicNotFoundException("No Mechanic exists that matches the Staff ID entered");
             }
 
             return staffId;
+        }
+
+        public static int ValidateServiceId(string serviceIdString) {
+            int serviceId = ValidateId(serviceIdString, "Service");
+            if (!ServiceExists(serviceId)) {
+                throw new ServiceNotFoundException("No Service exists that matches the Service ID entered");
+            }
+
+            return serviceId;
+        }
+
+        /// <summary>
+        /// Validates a Mechanic or Service ID.
+        /// </summary>
+        /// <param name="idString">The ID as a string.</param>
+        /// <param name="entityType">Either "Mechanic" or "Service".</param>
+        /// <returns>If successful the ID is returned as an int.</returns>
+        private static int ValidateId(string idString, string entityType) {
+            if (!int.TryParse(idString, out int id)) {
+                throw new InvalidCastException($"{entityType} ID must be 1 - 4 digits, 1 - 9999");
+            }
+            if (id < 1 || id > 9999) {
+                throw new ArgumentException($"{entityType} ID must be 1 - 4 digits, 1 - 9999");
+            }
+
+            return id;
         }
     }
 }
