@@ -12,6 +12,7 @@ namespace GarageAdmin.Helpers {
             Console.WriteLine("\n\t\t\t\t2) List all Mechanics That Serviced a Car");
             Console.WriteLine("\n\t\t\t\t3) List all Cars Serviced by a Mechanic");
             Console.WriteLine("\n\t\t\t\t4) List details of a Service");
+            Console.WriteLine("\n\t\t\t\t5) List parts replaced during services for a Car");
             Console.Write("\n\n\t\t\t\t\tSelection: ");
         }
 
@@ -20,9 +21,9 @@ namespace GarageAdmin.Helpers {
             Console.WriteLine("\n\n\n\n\n\n\t\t\t\t\t\tGoodbye!");
         }
 
-        public static void DisplayEnterReg() {
+        public static void DisplayEnterReg(string heading) {
             Console.Clear();
-            Console.WriteLine("\n\n\t\t\t\t\tMechanics\n");
+            Console.WriteLine($"\n\n\t\t\t\t\t{ heading }\n");
             Console.Write("\n\tEnter the Reg Number of the car: ");
         }
 

@@ -12,20 +12,20 @@ namespace GarageAdmin.Helpers {
             }
         }
 
-        public static void ValidateCarExists(string regNo) {
-            var car = UnitOfWork.Cars.GetCar(regNo);
-
-            if (car == null) {
-                throw new CarNotFoundException("No car exists that matches the Reg Number entered");
-            }
-        }
-
         public static void ValidateRegNo(string regNo) {
             Regex alphanumeric = new Regex("^[a-zA-Z0-9]*$");
             if (regNo.Length > 10 || regNo.Length < 5 || !alphanumeric.IsMatch(regNo)) {
                 throw new InvalidRegException("Reg Number entered must be 5 - 10 alphanumeric characters");
             }
             ValidateCarExists(regNo);
+        }
+
+        public static void ValidateCarExists(string regNo) {
+            var car = UnitOfWork.Cars.GetCar(regNo);
+
+            if (car == null) {
+                throw new CarNotFoundException("No car exists that matches the Reg Number entered");
+            }
         }
 
         public static bool MechanicExists(int staffId) {

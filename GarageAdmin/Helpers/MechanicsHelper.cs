@@ -28,7 +28,8 @@ namespace GarageAdmin.Helpers {
             Console.WriteLine("\n\n\t\t\t\t\tMechanics\n");
 
             foreach (var mechanic in mechanics) {
-                Console.WriteLine($"\tName: {mechanic.Forename} {mechanic.Surname}\tStaff ID: {mechanic.Id}");
+                Console.WriteLine($"\tName: {mechanic.Forename} {mechanic.Surname}" +
+                    $"\tStaff ID: {Formatters.FormatId(mechanic.Id)}");
             }
         }
     }

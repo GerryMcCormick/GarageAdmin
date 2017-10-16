@@ -1,7 +1,5 @@
 ﻿using GarageAdmin.Core.Repositories;
-using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 
 namespace GarageAdmin.Persistance.Repositories {
@@ -21,16 +19,13 @@ namespace GarageAdmin.Persistance.Repositories {
 
         public IEnumerable<Service> GetCarServiceDetailsByReg(string regNo) {
             return _context.Services
-                           .Include(s => s.Mechanic)
-                           .Include(s => s.Car)
-                           .Where(c => c.Car.RegNumber == regNo)
+                           .Where(s => s.Car.RegNumber == regNo)
                            .OrderBy(s => s.DateServiced); 
         }
 
         public IEnumerable<Service> GetCarsServicedByMechanic(int staffId) {
             return _context.Services
-                           .Include(s => s.Mechanic).Where(m => m.MechanicId == staffId)
-                           .Include(s => s.Car)
+                           .Where(m => m.Mechanic.Id == staffId)
                            .OrderBy(s => s.DateServiced);
         }
     }

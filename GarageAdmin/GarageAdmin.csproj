@@ -82,8 +82,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GarageModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\Formatters.cs" />
     <Compile Include="Helpers\MechanicsHelper.cs" />
     <Compile Include="Helpers\MenuHelper.cs" />
+    <Compile Include="Helpers\ServiceDisplayHelper.cs" />
     <Compile Include="Helpers\ServiceHelper.cs" />
     <Compile Include="Helpers\ValidationHelper.cs" />
     <Compile Include="Invoice.cs">

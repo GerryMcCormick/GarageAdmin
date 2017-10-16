@@ -13,41 +13,52 @@ namespace GarageAdmin.Helpers {
             }
         }
 
-        public static void ListCarServiceDetailsByReg() {
+        public static void ListServiceMechanicsForReg() {
             String regNo;
             List<Service> serviceDetails = new List<Service>();
             char keyEntered;
-            bool validRegEntered;
 
             do {
                 keyEntered = ' ';
-                MenuHelper.DisplayEnterReg();
-                regNo = Console.ReadLine().ToUpper().Trim();
-                try {
-                    ValidationHelper.ValidateRegNo(regNo);
-                    validRegEntered = true;
-                    serviceDetails = UnitOfWork.Services.GetCarServiceDetailsByReg(regNo).ToList();
-                } catch (InvalidRegException regEx) {
-                    Console.WriteLine($"\n\t{regEx.Message}");
-                    validRegEntered = false;
-                } catch (CarNotFoundException carEx) {
-                    Console.WriteLine($"\n\t{carEx.Message}");
-                    validRegEntered = false;
-                }
+                string heading = "Mechanics who serviced Car";
+                MenuHelper.DisplayEnterReg(heading);
 
-                if (!validRegEntered) {
+                serviceDetails = TryGetServiceDetailsForCar(out regNo, ref keyEntered);
+                if (serviceDetails.Count == 0) {
                     MenuHelper.DisplayReturnOrTryAgain();
                     char.TryParse(Console.ReadLine(), out keyEntered);
                 }
-            } while (!validRegEntered && keyEntered != '0');
+            } while (serviceDetails.Count == 0 && keyEntered != '0');
 
             if (serviceDetails.Count > 0) {
-                DisplayMechanicsWhoServicedCar(regNo, serviceDetails);
+                ServiceDisplayHelper.DisplayMechanicsWhoServicedCar(regNo, serviceDetails);
                 MenuHelper.DisplayPressKeyToReturnToMainMenu();
             }
         }
 
-        public static void ListCarServiceDetailsByMechanic() {
+        public static void ListPartsReplacedInCar() {
+            String regNo;
+            List<Service> serviceDetails;
+            char keyEntered;
+
+            do {
+                keyEntered = ' ';
+                string heading = "Parts replaced during Car's Services";
+                MenuHelper.DisplayEnterReg(heading);
+
+                serviceDetails = TryGetServiceDetailsForCar(out regNo, ref keyEntered);
+                if (serviceDetails.Count == 0) {
+                    MenuHelper.DisplayReturnOrTryAgain();
+                    char.TryParse(Console.ReadLine(), out keyEntered);
+                }
+            } while (serviceDetails.Count == 0 && keyEntered != '0');
+
+            if (serviceDetails.Count > 0) {
+                ServiceDisplayHelper.DisplayPartsReplacedForAllServices(regNo, serviceDetails);
+            }
+        }
+
+        public static void ListServicesByAMechanic() {
             List<Service> serviceDetails = new List<Service>();
             char keyEntered;
             int staffId;
@@ -57,17 +68,7 @@ namespace GarageAdmin.Helpers {
                 staffId = -1;
                 MenuHelper.DisplayEnterMechanicId();
 
-                try {
-                    staffId = ValidationHelper.ValidateStaffId(Console.ReadLine().Trim());
-                    serviceDetails = UnitOfWork.Services.GetCarsServicedByMechanic(staffId).ToList();
-                } catch (InvalidCastException icEx) {
-                    Console.WriteLine($"\n\t{icEx.Message}");
-                } catch (ArgumentException oorEx) {
-                    Console.WriteLine($"\n\t{oorEx.Message}");
-                } catch (MechanicNotFoundException mnfEx) {
-                    Console.WriteLine($"\n\t{mnfEx.Message}");
-                }
-
+                serviceDetails = TryGetMechanicServiceDetails(ref staffId);
                 if (staffId == -1) {
                     MenuHelper.DisplayReturnOrTryAgain();
                     char.TryParse(Console.ReadLine(), out keyEntered);
@@ -80,58 +81,60 @@ namespace GarageAdmin.Helpers {
         }
 
         public static void ListDetailsForAService() {
-            Service serviceDetails = new Service();
+            Service service = new Service();
             char keyEntered;
-            int serviceId;
 
             do {
                 keyEntered = ' ';
-                serviceId = -1;
                 MenuHelper.DisplayEnterServiceId();
+                string serviceIdString = Console.ReadLine().Trim();
 
-                try {
-                    serviceId = ValidationHelper.ValidateServiceId(Console.ReadLine().Trim());
-                    serviceDetails = UnitOfWork.Services.GetServiceDetails(serviceId);
-                } catch (InvalidCastException icEx) {
-                    Console.WriteLine($"\n\t{icEx.Message}");
-                } catch (ArgumentException oorEx) {
-                    Console.WriteLine($"\n\t{oorEx.Message}");
-                } catch (ServiceNotFoundException snfEx) {
-                    Console.WriteLine($"\n\t{snfEx.Message}");
-                }
-
-                if (serviceId == -1) {
+                service = TryGetService(serviceIdString);
+                if (service.Id == 0) {
                     MenuHelper.DisplayReturnOrTryAgain();
                     char.TryParse(Console.ReadLine(), out keyEntered);
                 }
-            } while (serviceId == -1 && keyEntered != '0');
+            } while (service.Id == 0 && keyEntered != '0');
 
-            if (serviceId != -1) {
-                DisplayServiceDetails(serviceDetails);
+            if (service.Id != 0) {
+                ServiceDisplayHelper.DisplayServiceDetails(service);
             }
         }
 
-        private static void DisplayServiceDetails(Service serviceDetails) {
-            Console.Clear();
-            Console.WriteLine($"\n\t\t\t\tService {serviceDetails.Id}");
-            Console.WriteLine($"\n\t\tCar: {serviceDetails.Car.RegNumber}\n");
-
-            if (serviceDetails.ServiceParts.Count > 0) {
-                Console.WriteLine("\t\tParts Used:");
-                foreach (var servicePart in serviceDetails.ServiceParts) {
-                    Console.WriteLine($"\t\t\tPart ID:          {servicePart.Part.Id}" +
-                                      $"\n\t\t\tSupplier Part ID: {servicePart.Part.SupplierPartNumber}" +
-                                      $"\n\t\t\tPart Name:        {servicePart.Part.PartName} " +
-                                      $"\n\t\t\tPrice per Unit:   £{servicePart.Part.Price.ToString("N2")} " +
-                                      $"\n\t\t\tQuantity:         {servicePart.Quantity}\n");
-                }
+        private static List<Service> TryGetMechanicServiceDetails(ref int staffId) {
+            List<Service> serviceDetails = new List<Service>();
+            try {
+                staffId = ValidationHelper.ValidateStaffId(Console.ReadLine().Trim());
+                serviceDetails = UnitOfWork.Services.GetCarsServicedByMechanic(staffId).ToList();
+            } catch (InvalidCastException icEx) {
+                Console.WriteLine($"\n\t{icEx.Message}");
+            } catch (ArgumentException oorEx) {
+                Console.WriteLine($"\n\t{oorEx.Message}");
+            } catch (MechanicNotFoundException mnfEx) {
+                Console.WriteLine($"\n\t{mnfEx.Message}");
             }
-            MenuHelper.DisplayPressKeyToReturnToMainMenu();
+            return serviceDetails;
+        }
+
+        private static Service TryGetService(string serviceIdString) {
+            Service service = new Service();
+            try {
+                int serviceId = ValidationHelper.ValidateServiceId(serviceIdString);
+                service = UnitOfWork.Services.GetServiceDetails(serviceId);
+            } catch (InvalidCastException icEx) {
+                Console.WriteLine($"\n\t{icEx.Message}");
+            } catch (ArgumentException oorEx) {
+                Console.WriteLine($"\n\t{oorEx.Message}");
+            } catch (ServiceNotFoundException snfEx) {
+                Console.WriteLine($"\n\t{snfEx.Message}");
+            }
+
+            return service;
         }
 
         private static void DisplayServicesForMechanic(List<Service> serviceDetails, int staffId) {
             if (serviceDetails.Count > 0) {
-                DisplayServicesByMechanic(serviceDetails);
+                ServiceDisplayHelper.DisplayServicesByMechanic(serviceDetails);
                 MenuHelper.DisplayPressKeyToReturnToMainMenu();
             } else {
                 var mechanic = UnitOfWork.Mechanics.GetMechanic(staffId);
@@ -139,27 +142,19 @@ namespace GarageAdmin.Helpers {
             }
         }
 
-        private static void DisplayServicesByMechanic(List<Service> serviceDetails) {
-            Console.Clear();
-            Mechanic mechanic = serviceDetails.ElementAt(0).Mechanic;
-            Console.WriteLine($"\n\t\t\t\tCars Serviced By {mechanic.Forename} {mechanic.Surname}");
-
-            foreach (var service in serviceDetails) {
-                string serviceDate = service.DateServiced.ToLocalTime().ToShortDateString();
-                Console.WriteLine($"\n\t\tCar: \t\t\t{service.Car.RegNumber} {service.Car.Make} {service.Car.Model} " +
-                                  $"\n\t\tServiced On: \t\t{serviceDate}" +
-                                  $"\n\t\tOwner Telephone Number: {service.Car.CarOwner.TelNumber}");
+        private static List<Service> TryGetServiceDetailsForCar(out string regNo, ref char keyEntered) {
+            List<Service> serviceDetails = new List<Service>();
+            regNo = Console.ReadLine().ToUpper().Trim();
+            try {
+                ValidationHelper.ValidateRegNo(regNo);
+                serviceDetails = UnitOfWork.Services.GetCarServiceDetailsByReg(regNo).ToList();
+            } catch (InvalidRegException regEx) {
+                Console.WriteLine($"\n\t{regEx.Message}");
+            } catch (CarNotFoundException carEx) {
+                Console.WriteLine($"\n\t{carEx.Message}");
             }
-        }
 
-        private static void DisplayMechanicsWhoServicedCar(string regNo, List<Service> serviceDetails) {
-            Console.Clear();
-            Console.WriteLine($"\n\t\t\t\tMechanics Who Serviced car {regNo}");
-            
-            foreach (var service in serviceDetails) {
-                string serviceDate = service.DateServiced.ToLocalTime().ToShortDateString();
-                Console.WriteLine($"\n\t\t{serviceDate} {service.Mechanic.Forename} {service.Mechanic.Surname}");
-            }
+            return serviceDetails;
         }
     }
 }

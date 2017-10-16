@@ -12,7 +12,7 @@ namespace GarageAdmin.Persistance.Repositories {
         }
 
         public DbSet<ServicePart> GetPartsReplacedForAllServices(string carReg) {
-            throw new NotImplementedException();
+            throw new NotImplementedException();//////////////////////////////////////
         }
     }
 }

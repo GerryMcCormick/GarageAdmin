@@ -17,9 +17,6 @@ namespace GarageAdmin.Persistance.Repositories {
                            .SingleOrDefault();
         }
 
-        /// <summary>
-        /// Q1 Get all mechanics ordered by surname
-        /// </summary>
         public IEnumerable<Mechanic> GetMechanics() {
             return _context.Mechanics.OrderBy(x => x.Surname);
         }
