@@ -11,7 +11,7 @@ namespace GarageAdmin.Persistance.Repositories {
             _context = context;
         }
 
-        public Service GetServiceDetails(int serviceId) {
+        public Service GetService(int serviceId) {
             return _context.Services
                            .Where(s => s.Id == serviceId)
                            .FirstOrDefault();

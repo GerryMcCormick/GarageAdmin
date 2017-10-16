@@ -59,8 +59,9 @@ namespace GarageAdmin.Helpers {
                 keyEntered = ' ';
                 staffId = -1;
                 MenuHelper.DisplayEnterMechanicId();
+                string mechanicIdString = Console.ReadLine().Trim();
 
-                serviceDetails = ServicesService.GetMechanicServiceDetails(ref staffId);
+                serviceDetails = ServicesService.GetMechanicServiceDetails(ref staffId, mechanicIdString);
                 if (staffId == -1) {
                     MenuHelper.DisplayReturnOrTryAgain();
                     char.TryParse(Console.ReadLine(), out keyEntered);
@@ -81,11 +82,11 @@ namespace GarageAdmin.Helpers {
                 MenuHelper.DisplayEnterServiceId();
                 string serviceIdString = Console.ReadLine().Trim();
 
-                service = ServicesService.GetService(serviceIdString);
+                service = ServicesService.GetServiceByIdString(serviceIdString);
                 if (service.Id == 0) {
                     MenuHelper.DisplayReturnOrTryAgain();
                     char.TryParse(Console.ReadLine(), out keyEntered);
-                }
+                }    
             } while (service.Id == 0 && keyEntered != '0');
 
             if (service.Id != 0) {

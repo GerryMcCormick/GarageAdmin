@@ -59,9 +59,7 @@
     </Compile>
     <Compile Include="Core\IUnitOfWork.cs" />
     <Compile Include="Core\Repositories\ICarRepository.cs" />
-    <Compile Include="Core\Repositories\IInvoiceRepository.cs" />
     <Compile Include="Core\Repositories\IMechanicRepository.cs" />
-    <Compile Include="Core\Repositories\IServicePartRepository.cs" />
     <Compile Include="Core\Repositories\IServiceRepository.cs" />
     <Compile Include="Exceptions\CarNotFoundException.cs" />
     <Compile Include="Exceptions\InvalidRegException.cs" />
@@ -98,9 +96,7 @@
       <DependentUpon>GarageModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Persistance\Repositories\CarRepository.cs" />
-    <Compile Include="Persistance\Repositories\InvoiceRepository.cs" />
     <Compile Include="Persistance\Repositories\MechanicRepository.cs" />
-    <Compile Include="Persistance\Repositories\ServicePartRepository.cs" />
     <Compile Include="Persistance\Repositories\ServiceRepository.cs" />
     <Compile Include="Persistance\Repositories\UnitOfWork.cs" />
     <Compile Include="Program.cs" />
@@ -111,6 +107,7 @@
     <Compile Include="ServicePart.cs">
       <DependentUpon>GarageModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Services\CarService.cs" />
     <Compile Include="Services\MechanicsService.cs" />
     <Compile Include="Services\ServicesService.cs" />
   </ItemGroup>

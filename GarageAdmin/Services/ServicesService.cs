@@ -14,11 +14,11 @@ namespace GarageAdmin.Services {
             }
         }
 
-        public static List<Service> GetMechanicServiceDetails(ref int staffId) {
-            List<Service> serviceDetails = new List<Service>();
+        public static List<Service> GetMechanicServiceDetails(ref int staffId, string mechanicIdString) {
+            List<Service> services = new List<Service>();
             try {
-                staffId = ValidationHelper.ValidateStaffId(Console.ReadLine().Trim());
-                serviceDetails = UnitOfWork.Services.GetCarsServicedByMechanic(staffId).ToList();
+                staffId = ValidationHelper.ValidateStaffIdString(mechanicIdString);
+                services = UnitOfWork.Services.GetCarsServicedByMechanic(staffId).ToList();
             } catch (InvalidCastException icEx) {
                 Console.WriteLine($"\n\t{icEx.Message}");
             } catch (ArgumentException oorEx) {
@@ -26,14 +26,14 @@ namespace GarageAdmin.Services {
             } catch (MechanicNotFoundException mnfEx) {
                 Console.WriteLine($"\n\t{mnfEx.Message}");
             }
-            return serviceDetails;
+            return services;
         }
 
-        public static Service GetService(string serviceIdString) {
+        public static Service GetServiceByIdString(string serviceIdString) {
             Service service = new Service();
             try {
-                int serviceId = ValidationHelper.ValidateServiceId(serviceIdString);
-                service = UnitOfWork.Services.GetServiceDetails(serviceId);
+                int serviceId = ValidationHelper.ValidateServiceIdString(serviceIdString);
+                service = GetServiceById(serviceId);
             } catch (InvalidCastException icEx) {
                 Console.WriteLine($"\n\t{icEx.Message}");
             } catch (ArgumentException oorEx) {
@@ -45,17 +45,21 @@ namespace GarageAdmin.Services {
         }
 
         public static List<Service> GetServiceDetailsForCar(out string regNo, ref char keyEntered) {
-            List<Service> serviceDetails = new List<Service>();
+            List<Service> services = new List<Service>();
             regNo = Console.ReadLine().ToUpper().Trim();
             try {
                 ValidationHelper.ValidateRegNo(regNo);
-                serviceDetails = UnitOfWork.Services.GetCarServiceDetailsByReg(regNo).ToList();
+                services = UnitOfWork.Services.GetCarServiceDetailsByReg(regNo).ToList();
             } catch (InvalidRegException regEx) {
                 Console.WriteLine($"\n\t{regEx.Message}");
             } catch (CarNotFoundException carEx) {
                 Console.WriteLine($"\n\t{carEx.Message}");
             }
-            return serviceDetails;
+            return services;
+        }
+
+        public static Service GetServiceById(int serviceId) {
+            return UnitOfWork.Services.GetService(serviceId);
         }
     }
 }

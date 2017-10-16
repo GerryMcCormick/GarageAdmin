@@ -1,5 +1,4 @@
 ﻿using GarageAdmin.Core.Repositories;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,10 +17,6 @@ namespace GarageAdmin.Persistance.Repositories {
                                     select c;
 
             return cars.FirstOrDefault();
-        }
-
-        public IEnumerable<Car> GetCarsServicedByMechanic(int mechanicId) {
-            throw new NotImplementedException();
         }
     }
 }

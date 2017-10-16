@@ -4,7 +4,7 @@ using System;
 namespace GarageAdmin {
     class Program {
 
-        enum MenuOption {
+        private enum MenuOption {
             Quit,
             ListMechanics,
             ListServiceMechanicsForReg,
