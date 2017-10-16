@@ -111,6 +111,8 @@
     <Compile Include="ServicePart.cs">
       <DependentUpon>GarageModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Services\MechanicsService.cs" />
+    <Compile Include="Services\ServicesService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

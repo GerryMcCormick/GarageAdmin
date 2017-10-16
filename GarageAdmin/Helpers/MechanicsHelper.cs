@@ -1,4 +1,4 @@
-﻿using GarageAdmin.Persistance.Repositories;
+﻿using GarageAdmin.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,14 +6,8 @@ using System.Linq;
 namespace GarageAdmin.Helpers {
     public class MechanicsHelper {
 
-        private static UnitOfWork UnitOfWork {
-            get {
-                return new UnitOfWork(new GarageModelContainer());
-            }
-        }
-
         public static void ListMechanics() {
-            var mechanics = UnitOfWork.Mechanics.GetMechanics().ToList();
+            var mechanics = MechanicsService.GetMechanics().ToList();
 
             if (mechanics.Count > 0) {
                 DisplayAllMechanics(mechanics);
