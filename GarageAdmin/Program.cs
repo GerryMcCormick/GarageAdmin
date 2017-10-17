@@ -4,50 +4,57 @@ using System;
 namespace GarageAdmin {
     class Program {
 
-        private enum MenuOption {
+        private enum Menu {
             Quit,
             ListMechanics,
             ListServiceMechanicsForReg,
             ListServicesByAMechanic,
             ListDetailsForAService,
-            ListPartsReplacedInCar
+            ListPartsReplacedInCar,
+            ListCarsLatestServiceBill
         }
 
         static void Main(string[] args) {
-            MenuOption selection;
+            Menu selection;
             bool validSelection;
 
             do {
                 MenuHelper.DisplayMenu();
-                validSelection = MenuOption.TryParse(Console.ReadLine(), out selection);
+                validSelection = Menu.TryParse(Console.ReadLine(), out selection);
 
                 if (validSelection) {
                     Console.Clear();
-
-                    switch (selection) {
-                        case MenuOption.Quit: 
-                            MenuHelper.Quit();
-                            break;
-                        case MenuOption.ListMechanics:
-                            MechanicsHelper.ListMechanics();
-                            break;
-                        case MenuOption.ListServiceMechanicsForReg:
-                            ServiceHelper.ListServiceMechanicsForReg();
-                            break;
-                        case MenuOption.ListServicesByAMechanic:
-                            ServiceHelper.ListServicesByAMechanic();
-                            break;
-                        case MenuOption.ListDetailsForAService:
-                            ServiceHelper.ListDetailsForAService();
-                            break;
-                        case MenuOption.ListPartsReplacedInCar:
-                            ServiceHelper.ListPartsReplacedInCar();
-                            break;
-                    }
+                    RunMenuOption(selection);
                 } else {
                     MenuHelper.DisplayInvalidMenuOptionSelected();
                 } 
-            } while (selection != MenuOption.Quit || !validSelection);
+            } while (selection != Menu.Quit || !validSelection);
+        }
+
+        private static void RunMenuOption(Menu selection) {
+            switch (selection) {
+                case Menu.Quit:
+                    MenuHelper.Quit();
+                    break;
+                case Menu.ListMechanics:
+                    MechanicsHelper.ListMechanics();
+                    break;
+                case Menu.ListServiceMechanicsForReg:
+                    ServiceHelper.ListServiceMechanicsForReg();
+                    break;
+                case Menu.ListServicesByAMechanic:
+                    ServiceHelper.ListServicesByAMechanic();
+                    break;
+                case Menu.ListDetailsForAService:
+                    ServiceHelper.ListDetailsForAService();
+                    break;
+                case Menu.ListPartsReplacedInCar:
+                    ServiceHelper.ListPartsReplacedInCar();
+                    break;
+                case Menu.ListCarsLatestServiceBill:
+                    ServiceHelper.ListCarsLatestServiceBill();
+                    break;
+            }
         }
     }
 }

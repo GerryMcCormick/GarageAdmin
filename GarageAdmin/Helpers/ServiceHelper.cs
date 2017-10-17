@@ -1,6 +1,7 @@
 ﻿using GarageAdmin.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GarageAdmin.Helpers {
     public class ServiceHelper {
@@ -14,8 +15,8 @@ namespace GarageAdmin.Helpers {
                 keyEntered = ' ';
                 string heading = "Mechanics who serviced Car";
                 MenuHelper.DisplayEnterReg(heading);
-
-                serviceDetails = ServicesService.GetServiceDetailsForCar(out regNo, ref keyEntered);
+                regNo = Console.ReadLine().ToUpper().Trim();
+                serviceDetails = ServicesService.GetServiceDetailsForCar(regNo, ref keyEntered);
                 if (serviceDetails.Count == 0) {
                     MenuHelper.DisplayReturnOrTryAgain();
                     char.TryParse(Console.ReadLine(), out keyEntered);
@@ -37,8 +38,8 @@ namespace GarageAdmin.Helpers {
                 keyEntered = ' ';
                 string heading = "Parts replaced during Car's Services";
                 MenuHelper.DisplayEnterReg(heading);
-
-                serviceDetails = ServicesService.GetServiceDetailsForCar(out regNo, ref keyEntered);
+                regNo = Console.ReadLine().ToUpper().Trim();
+                serviceDetails = ServicesService.GetServiceDetailsForCar(regNo, ref keyEntered);
                 if (serviceDetails.Count == 0) {
                     MenuHelper.DisplayReturnOrTryAgain();
                     char.TryParse(Console.ReadLine(), out keyEntered);
@@ -47,6 +48,28 @@ namespace GarageAdmin.Helpers {
 
             if (serviceDetails.Count > 0) {
                 ServiceDisplayHelper.DisplayPartsReplacedForAllServices(regNo, serviceDetails);
+            }
+        }
+
+        public static void ListCarsLatestServiceBill() {
+            Service service;
+            char keyEntered;
+
+            do {
+                keyEntered = ' ';
+                string heading = "Show bill for a Car's latest Service";
+                MenuHelper.DisplayEnterReg(heading);
+                String regNo = Console.ReadLine().ToUpper().Trim();
+                service = ServicesService.GetServiceDetailsForCar(regNo, ref keyEntered)
+                                         .Last();
+                if (service.Id == 0) {
+                    MenuHelper.DisplayReturnOrTryAgain();
+                    char.TryParse(Console.ReadLine(), out keyEntered);
+                }
+            } while (service.Id == 0 && keyEntered != '0');
+
+            if (service.Id != 0) {
+                ServiceDisplayHelper.DisplayServiceDetails(service);
             }
         }
 

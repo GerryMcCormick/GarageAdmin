@@ -5,6 +5,8 @@ using System.Linq;
 namespace GarageAdmin.Helpers {
     public class ServiceDisplayHelper {
 
+        private static double SERVICE_CHARGE_PER_HOUR = 30.0;
+
         public static void DisplayMechanicsWhoServicedCar(string regNo, List<Service> serviceDetails) {
             Console.Clear();
             Console.WriteLine($"\n\t\t\t\tMechanics Who Serviced car {regNo}");
@@ -22,17 +24,8 @@ namespace GarageAdmin.Helpers {
             foreach (var service in serviceDetails) {
                 Console.WriteLine($"\n\t\tService Date: {Formatters.FormatServiceDate(service.DateServiced)} \n" +
                     $"\t\tMechanic: {service.Mechanic.Forename} {service.Mechanic.Surname}");
-                DisplayServiceParts(service);
+                DisplayServicePartsAndCalculateCost(service);
             }
-            MenuHelper.DisplayPressKeyToReturnToMainMenu();
-        }
-
-        public static void DisplayServiceDetails(Service service) {
-            Console.Clear();
-            Console.WriteLine($"\n\t\t\t\tService ID: {Formatters.FormatId(service.Id)}");
-            Console.WriteLine($"\t\t\t\tService Date: {Formatters.FormatServiceDate(service.DateServiced)}");
-            Console.WriteLine($"\n\t\tCar: {service.Car.RegNumber}\n");
-            DisplayServiceParts(service);
             MenuHelper.DisplayPressKeyToReturnToMainMenu();
         }
 
@@ -48,15 +41,42 @@ namespace GarageAdmin.Helpers {
             }
         }
 
-        private static void DisplayServiceParts(Service service) {
+        public static void DisplayServiceDetails(Service service) {
+            Console.Clear();
+            Console.WriteLine($"\n\t\t\t\tService Details");
+            Console.WriteLine($"\n\t\tService ID: {Formatters.FormatId(service.Id)}");
+            Console.WriteLine($"\t\tService Date: {Formatters.FormatServiceDate(service.DateServiced)}");
+            Console.WriteLine($"\t\tCar: {service.Car.RegNumber}");
+            DisplayBillingInfo(service);
+            MenuHelper.DisplayPressKeyToReturnToMainMenu();
+        }
+
+        private static void DisplayBillingInfo(Service service) {
+            double partsPrice = DisplayServicePartsAndCalculateCost(service);
+            Console.WriteLine($"\t\t\tTotal Parts Cost: £{partsPrice}");
+
+            double duration = service.DurationInHours;
+            Console.WriteLine($"\n\t\tService Duration:    {duration} hours");
+
+            double totalServicePrice = (service.DurationInHours * SERVICE_CHARGE_PER_HOUR) + partsPrice;
+            Console.WriteLine($"\t\tTotal Service Price: £{Formatters.FormatPrice(totalServicePrice)}");
+            Console.WriteLine($"\n\t\t* Service charge per hour: £{Formatters.FormatPrice(SERVICE_CHARGE_PER_HOUR)}");
+        }
+
+        private static double DisplayServicePartsAndCalculateCost(Service service) {
             if (service.ServiceParts.Count > 0) {
+                double totalPrice = 0.0;
+
                 Console.WriteLine("\n\t\tParts Replaced:");
                 foreach (var servicePart in service.ServiceParts) {
                     DisplayServicePart(servicePart);
+                    totalPrice += servicePart.Part.Price * servicePart.Quantity;
                 }
-            } else {
-                Console.WriteLine("\n\t\t\tNo Parts were replaced during this Service");
+                return totalPrice;
             }
+
+            Console.WriteLine("\n\t\t\tNo Parts were replaced during this Service");
+            return 0.0;
         }
 
         private static void DisplayServicePart(ServicePart servicePart) {

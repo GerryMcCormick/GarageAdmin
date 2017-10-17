@@ -44,9 +44,8 @@ namespace GarageAdmin.Services {
             return service;
         }
 
-        public static List<Service> GetServiceDetailsForCar(out string regNo, ref char keyEntered) {
+        public static List<Service> GetServiceDetailsForCar(string regNo, ref char keyEntered) {
             List<Service> services = new List<Service>();
-            regNo = Console.ReadLine().ToUpper().Trim();
             try {
                 ValidationHelper.ValidateRegNo(regNo);
                 services = UnitOfWork.Services.GetCarServiceDetailsByReg(regNo).ToList();

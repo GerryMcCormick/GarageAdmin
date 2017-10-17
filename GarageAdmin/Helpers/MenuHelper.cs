@@ -13,6 +13,7 @@ namespace GarageAdmin.Helpers {
             Console.WriteLine("\n\t\t\t\t3) List all Cars Serviced by a Mechanic");
             Console.WriteLine("\n\t\t\t\t4) List details of a Service");
             Console.WriteLine("\n\t\t\t\t5) List parts replaced during services for a Car");
+            Console.WriteLine("\n\t\t\t\t6) List billing info for Car's most recent Service");
             Console.Write("\n\n\t\t\t\t\tSelection: ");
         }
 
