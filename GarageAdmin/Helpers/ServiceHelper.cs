@@ -61,12 +61,12 @@ namespace GarageAdmin.Helpers {
                 MenuHelper.DisplayEnterReg(heading);
                 String regNo = Console.ReadLine().ToUpper().Trim();
                 service = ServicesService.GetServiceDetailsForCar(regNo, ref keyEntered)
-                                         .Last();
-                if (service.Id == 0) {
+                                         .LastOrDefault();
+                if (service == null) {
                     MenuHelper.DisplayReturnOrTryAgain();
                     char.TryParse(Console.ReadLine(), out keyEntered);
                 }
-            } while (service.Id == 0 && keyEntered != '0');
+            } while (service == null && keyEntered != '0');
 
             if (service.Id != 0) {
                 ServiceDisplayHelper.DisplayServiceDetails(service);
